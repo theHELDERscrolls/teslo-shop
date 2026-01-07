@@ -1,9 +1,9 @@
 @if(productResource.isLoading()){
-<div class="flex justify-center items-center h-screen w-full">
+<div class="flex items-center justify-center w-full h-screen">
   <span class="loading loading-spinner loading-lg"></span>
 </div>
 } @if(productResource.hasValue()){
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 ">
   <product-carousel [images]="productResource.value().images" />
 
   <div>
