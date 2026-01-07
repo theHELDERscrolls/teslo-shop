@@ -1,12 +1,26 @@
+<!-- Título principal de la página -->
 <h1 class="text-3xl font-bold font-montserrat">Todos los productos</h1>
+<!-- Subtítulo descriptivo -->
 <h2 class="mb-4 text-xl">Para todos los gustos</h2>
 
+<!-- Grid responsivo que muestra las tarjetas de productos -->
+<!-- gap-3: espaciado entre los productos -->
+<!-- Responsive: 1 columna en móvil, 2 en tablet, 3 en desktop, 4 en pantallas extra grandes -->
 <div class="grid flex-1 grid-cols-1 gap-3 mt-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+  <!-- Loop que itera sobre cada producto de la respuesta de la API -->
+  <!-- productsResource.value()?.products obtiene el array de productos -->
+  <!-- ?. es optional chaining (evita errores si no hay datos) -->
+  <!-- track $index optimiza el rendimiento -->
   @for (product of productsResource.value()?.products; track $index) {
+  <!-- Componente de tarjeta de producto que recibe cada producto como input -->
   <product-card [product]="product" />
   }
 </div>
 
+<!-- Componente de paginación para navegar entre páginas -->
+<!-- [pages]: número total de páginas disponibles (obtiene de la respuesta de la API) -->
+<!-- ?? 0: operador nullish coalescing (usa 0 si no hay datos) -->
+<!-- [currentPage]: página actual según el parámetro de query de la URL -->
 <app-pagination
   [pages]="productsResource.value()?.pages ?? 0"
   [currentPage]="paginationService.currentPage()"

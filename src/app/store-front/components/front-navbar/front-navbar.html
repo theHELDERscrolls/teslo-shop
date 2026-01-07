@@ -1,7 +1,12 @@
+<!-- Barra de navegación fija en la parte superior -->
 <div class="fixed top-0 left-0 shadow-sm navbar bg-base-100">
+  <!-- Parte izquierda de la navbar -->
   <div class="navbar-start">
+    <!-- Dropdown (menú desplegable) que solo se muestra en pantallas pequeñas (lg:hidden) -->
     <div class="dropdown">
+      <!-- Botón que abre el dropdown - solo visible en móvil -->
       <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+        <!-- Icono de menú hamburgesa (tres líneas) -->
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="w-5 h-5"
@@ -17,22 +22,29 @@
           />
         </svg>
       </div>
+      
+      <!-- Menú desplegable con las categorías (solo móvil) -->
       <ul
         tabindex="-1"
         class="p-2 mt-3 shadow menu menu-sm dropdown-content bg-base-100 rounded-box z-1 w-52"
       >
+        <!-- Opción para productos de Hombres -->
         <li>
+          <!-- routerLink navega a la página de productos filtrados por género "men" -->
+          <!-- routerLinkActive añade la clase text-secondary cuando este enlace es activo -->
           <a routerLink="gender/men" class="btn btn-ghost" routerLinkActive="text-secondary"
             >Hombres</a
           >
         </li>
 
+        <!-- Opción para productos de Mujeres -->
         <li>
           <a routerLink="gender/women" class="btn btn-ghost" routerLinkActive="text-secondary"
             >Mujeres</a
           >
         </li>
 
+        <!-- Opción para productos de Niños -->
         <li>
           <a routerLink="gender/kid" class="btn btn-ghost" routerLinkActive="text-secondary"
             >Kids</a
@@ -40,30 +52,41 @@
         </li>
       </ul>
     </div>
+    
+    <!-- Logo/Título de la tienda que enlaza a la página principal -->
     <a routerLink="/" class="text-xl btn btn-ghost font-montserrat"
       >Teslo <span class="text-primary">| Shop</span></a
     >
   </div>
+  
+  <!-- Parte central de la navbar (menú horizontal, solo visible en pantallas grandes) -->
   <div class="hidden navbar-center lg:flex">
+    <!-- Menú horizontal con las tres categorías (visible solo en desktop) -->
     <ul class="px-1 menu menu-horizontal">
+      <!-- Opción para productos de Hombres -->
       <li>
         <a routerLink="gender/men" class="btn btn-ghost" routerLinkActive="text-secondary"
           >Hombres</a
         >
       </li>
 
+      <!-- Opción para productos de Mujeres -->
       <li>
         <a routerLink="gender/women" class="btn btn-ghost" routerLinkActive="text-secondary"
           >Mujeres</a
         >
       </li>
 
+      <!-- Opción para productos de Niños -->
       <li>
         <a routerLink="gender/kid" class="btn btn-ghost" routerLinkActive="text-secondary">Kids</a>
       </li>
     </ul>
   </div>
+  
+  <!-- Parte derecha de la navbar -->
   <div class="navbar-end">
+    <!-- Botón de carrito/acciones (placeholder por ahora) -->
     <a class="btn">Button</a>
   </div>
 </div>

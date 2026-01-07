@@ -21,36 +21,49 @@ import { Navigation, Pagination } from 'swiper/modules';
   `,
 })
 export class ProductCarousel implements AfterViewInit {
+  // Input requerido: array de URLs de imágenes del producto
+  // Este valor viene del componente padre (product-card o product-page)
   images = input.required<string[]>();
 
+  // Referencia al elemento del DOM donde está el carrusel Swiper
+  // Se obtiene usando el template reference variable #swiperDiv
   swiperDiv = viewChild.required<ElementRef>('swiperDiv');
 
+  /**
+   * Se ejecuta después de que la vista se haya inicializado
+   * Aquí inicializamos el carrusel Swiper con sus configuraciones
+   */
   ngAfterViewInit(): void {
+    // Obtenemos el elemento del DOM nativo del template reference variable
     const element = this.swiperDiv().nativeElement;
 
+    // Si no existe el elemento, retornamos para evitar errores
     if (!element) return;
 
+    // Inicializamos Swiper con las configuraciones deseadas
     const swiper = new Swiper(element, {
-      // Optional parameters
+      // El carrusel se desplaza horizontalmente (de izquierda a derecha)
       direction: 'horizontal',
+      // loop: true permite que cuando llegues al final, vuelva al principio de forma continua
       loop: true,
 
+      // Registramos los módulos que usaremos en el carrusel
       modules: [Navigation, Pagination],
 
-      // If we need pagination
+      // Configuración de la paginación (los puntos que indican en qué slide estamos)
       pagination: {
-        el: '.swiper-pagination',
+        el: '.swiper-pagination', // Selector CSS del elemento donde aparecerá la paginación
       },
 
-      // Navigation arrows
+      // Configuración de los botones de navegación (flechas siguiente/anterior)
       navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
+        nextEl: '.swiper-button-next',  // Selector CSS del botón siguiente
+        prevEl: '.swiper-button-prev',  // Selector CSS del botón anterior
       },
 
-      // And if we need scrollbar
+      // Configuración de la barra de scroll (opcional)
       scrollbar: {
-        el: '.swiper-scrollbar',
+        el: '.swiper-scrollbar', // Selector CSS de la barra de scroll
       },
     });
   }
