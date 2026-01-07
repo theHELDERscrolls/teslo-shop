@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-gender-page',
   imports: [],
-  templateUrl: './gender-page.html',
+  templateUrl: './gender-page.component.html',
 })
 export class GenderPage {
 
