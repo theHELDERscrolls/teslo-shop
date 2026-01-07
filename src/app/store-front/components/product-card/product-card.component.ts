@@ -10,5 +10,7 @@ import { RouterLink } from '@angular/router';
   templateUrl: './product-card.component.html',
 })
 export class ProductCard {
+  // Input requerido: objeto de producto con toda su información
+  // Este componente recibe un producto del componente padre para mostrar sus detalles
   product = input.required<Product>();
 }

@@ -1,16 +1,30 @@
+<!-- Mientras se carga el producto desde la API -->
+<!-- productResource.isLoading() devuelve true mientras se hace la petición -->
 @if(productResource.isLoading()){
-<div class="flex justify-center items-center h-screen w-full">
+<!-- Mostrar un spinner de carga centrado en la pantalla -->
+<div class="flex items-center justify-center w-full h-screen">
+  <!-- Icono de spinner (círculo rotativo) en tamaño grande -->
   <span class="loading loading-spinner loading-lg"></span>
 </div>
-} @if(productResource.hasValue()){
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+}
+<!-- Una vez que se han cargado los datos del producto -->
+<!-- productResource.hasValue() devuelve true cuando la petición ha sido exitosa -->
+@if(productResource.hasValue()){
+<!-- Contenedor principal con grid de 2 columnas (1 en móvil, 2 en tablet+) -->
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 ">
+  <!-- Carrusel de imágenes del producto (izquierda) -->
+  <!-- Pasamos el array de imágenes al componente carousel -->
   <product-carousel [images]="productResource.value().images" />
 
+  <!-- Información del producto (derecha) -->
   <div>
+    <!-- Título del producto en grande y negrita -->
     <h2 class="text-2xl font-bold font-montserrat">{{ productResource.value().title }}</h2>
 
+    <!-- Línea divisoria visual entre título y descripción -->
     <div class="divider"></div>
 
+    <!-- Descripción detallada del producto -->
     <p>{{ productResource.value().description }}</p>
   </div>
 </div>

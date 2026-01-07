@@ -1,10 +1,26 @@
+<!-- Título principal de la página -->
 <h1 class="text-3xl font-bold font-montserrat">Todos los productos</h1>
+<!-- Subtítulo que incluye dinámicamente el género seleccionado -->
+<!-- gender() devuelve el género actual (men, women, kid) desde la URL -->
 <h2 class="mb-4 text-xl">
-  Para todos los gustos <span class="text-accent font-bold font-montserrat">{{ gender() }}</span>
+  Para todos los gustos <span class="font-bold text-accent font-montserrat">{{ gender() }}</span>
 </h2>
 
+<!-- Grid responsivo para mostrar productos filtrados por género -->
 <div class="grid flex-1 grid-cols-1 gap-3 mt-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+  <!-- Loop que itera sobre los productos filtrados por género -->
+  <!-- productsResource.value()?.products obtiene solo los productos del género actual -->
+  <!-- ?. evita errores si aún no hay datos cargados -->
   @for (product of productsResource.value()?.products; track $index) {
+  <!-- Cada producto se renderiza en una tarjeta -->
   <product-card [product]="product" />
   }
 </div>
+
+<!-- Paginación para navegar entre páginas de este género específico -->
+<!-- [pages]: número de páginas del género actual -->
+<!-- [currentPage]: página actual según la URL -->
+<app-pagination
+  [pages]="productsResource.value()?.pages ?? 0"
+  [currentPage]="paginationService.currentPage()"
+/>
