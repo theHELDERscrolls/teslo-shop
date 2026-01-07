@@ -1,10 +1,8 @@
-<section class="flex flex-col items-center justify-center p-2 md:p-6 lg:p-10 xl:p-14">
-  <h1 class="text-3xl font-bold font-montserrat">Todos los productos</h1>
-  <h2 class="mb-4 text-xl">Para todos los gustos</h2>
+<h1 class="text-3xl font-bold font-montserrat">Todos los productos</h1>
+<h2 class="mb-4 text-xl">Para todos los gustos</h2>
 
-  <div class="grid flex-1 grid-cols-1 gap-3 mt-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-    @for (product of productsResource.value()?.products; track $index) {
-    <product-card [product]="product" />
-    }
-  </div>
-</section>
+<div class="grid flex-1 grid-cols-1 gap-3 mt-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+  @for (product of productsResource.value()?.products; track $index) {
+  <product-card [product]="product" />
+  }
+</div>
