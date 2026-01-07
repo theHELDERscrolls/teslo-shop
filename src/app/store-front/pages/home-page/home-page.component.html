@@ -3,9 +3,8 @@
   <h2 class="mb-4 text-xl">Para todos los gustos</h2>
 
   <div class="grid flex-1 grid-cols-1 gap-3 mt-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-    <product-card />
-    <product-card />
-    <product-card />
-    <product-card />
+    @for (product of productsResource.value()?.products; track $index) {
+    <product-card [product]="product" />
+    }
   </div>
 </section>
