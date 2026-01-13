@@ -1,5 +1,11 @@
+<!-- Formulario de login con validación reactiva -->
+<!-- [formGroup]="loginForm": vincula el formulario HTML al FormGroup de TypeScript -->
+<!-- (ngSubmit)="onSubmit()": ejecuta onSubmit() cuando se envía el formulario -->
 <form class="flex flex-col gap-2" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <!-- Campo de entrada para el email -->
+  <!-- class="input input-bordered": estilos de entrada (framework Daisy UI o similar) -->
   <label class="flex items-center gap-2 input input-bordered">
+    <!-- Ícono de correo electrónico SVG -->
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 16 16"
@@ -13,10 +19,15 @@
         d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z"
       />
     </svg>
+    <!-- Input para el email -->
+    <!-- type="text": tipo de entrada (aunque debería ser "email") -->
+    <!-- formControlName="email": vincula este input al control "email" del formulario -->
     <input type="text" class="grow" placeholder="Correo electrónico" formControlName="email" />
   </label>
 
+  <!-- Campo de entrada para la contraseña -->
   <label class="flex items-center gap-2 input input-bordered">
+    <!-- Ícono de candado SVG para representar la contraseña -->
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 16 16"
@@ -29,35 +40,55 @@
         clip-rule="evenodd"
       />
     </svg>
+    <!-- Input para la contraseña -->
+    <!-- type="password": oculta los caracteres mientras se escriben -->
+    <!-- formControlName="password": vincula este input al control "password" del formulario -->
     <input type="password" class="grow" placeholder="Contraseña" formControlName="password" />
   </label>
 
-  <button type="submit" class="btn btn-secondary">Login</button>
+  <!-- Botón para enviar el formulario -->
+  <!-- type="submit": envía el formulario y ejecuta (ngSubmit) -->
+  <!-- btn btn-primary: estilos de botón principal -->
+  <button type="submit" class="btn btn-primary">Login</button>
 
+  <!-- Texto con enlace para usuarios sin cuenta -->
   <p class="text-center text-slate-700">
     ¿No tienes cuenta?
+    <!-- Enlace a la página de registro -->
+    <!-- routerLink="/auth/register": navega a la ruta de registro sin recargar la página -->
+    <!-- cursor-pointer: cambia el cursor a puntero -->
+    <!-- text-secondary: color secundario del tema -->
+    <!-- hover:underline: subrayado al pasar el ratón -->
     <a routerLink="/auth/register" class="cursor-pointer text-secondary hover:underline"
       >Crea una aquí</a
     >
   </p>
 </form>
 
-  <!-- ALERT -->
-  @if (hasError()) {
-  <div role="alert" class="fixed max-w-xl alert alert-error animate-fade-in bottom-5 right-5">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="w-6 h-6 stroke-current shrink-0"
-      fill="none"
-      viewBox="0 0 24 24"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
-    <span>Por favor, revise la información ingresada.</span>
-  </div>
-  }
+<!-- Alerta de error que se muestra cuando el login falla -->
+<!-- @if (hasError()): directiva de Angular que muestra el contenido solo si hasError es true -->
+@if (hasError()) {
+<!-- Contenedor de alerta con rol ARIA para accesibilidad -->
+<!-- role="alert": indica que este elemento es una alerta para lectores de pantalla -->
+<!-- alert alert-error: estilos de alerta con color rojo de error -->
+<!-- animate-fade-in: animación de entrada suave -->
+<!-- bottom-5 right-5: posición fija en la esquina inferior derecha -->
+<div role="alert" class="fixed max-w-xl alert alert-error animate-fade-in bottom-5 right-5">
+  <!-- Ícono de error (X en círculo) SVG -->
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="w-6 h-6 stroke-current shrink-0"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
+  </svg>
+  <!-- Mensaje de error -->
+  <span>Por favor, revise la información ingresada.</span>
+</div>
+}
