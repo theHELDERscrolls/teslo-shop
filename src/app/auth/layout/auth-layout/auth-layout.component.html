@@ -1,0 +1,22 @@
+<!-- Contenedor principal centrado en la pantalla -->
+<div class="flex items-center justify-center min-h-screen">
+  <!-- Caja que contiene el formulario de autenticación -->
+  <!-- max-w-xs: ancho máximo pequeño, adecuado para formularios -->
+  <!-- shadow-2xl: sombra pronunciada para dar profundidad -->
+  <!-- rounded-lg: bordes redondeados para un aspecto moderno -->
+  <!-- p-4: padding interno para separar el contenido de los bordes -->
+  <div class="w-full max-w-xs bg-slate-100 shadow-2xl rounded-lg p-4">
+    <!-- Título de la sección de autenticación -->
+    <!-- text-2xl: tamaño de texto grande -->
+    <!-- font-bold: texto en negrita -->
+    <!-- text-secondary: color secundario del tema -->
+    <!-- text-center: centrado horizontalmente -->
+    <!-- mb-2: margen inferior para separación -->
+    <h1 class="text-2xl font-montserrat font-bold text-secondary text-center mb-2">
+      Autenticación
+    </h1>
+    <!-- RouterOutlet: espacio donde Angular renderiza el componente de la ruta activa -->
+    <!-- Aquí se cargará LoginPage o RegisterPage según la URL -->
+    <router-outlet />
+  </div>
+</div>

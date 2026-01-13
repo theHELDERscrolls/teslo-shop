@@ -1,12 +1,23 @@
 <!-- Barra de navegación fija en la parte superior -->
-<div class="fixed top-0 left-0 shadow-sm navbar bg-base-100">
+<!-- fixed: posición fija sin desplazamiento -->
+<!-- top-0 left-0: esquina superior izquierda -->
+<!-- shadow-sm: sombra suave para separación visual -->
+<!-- navbar: clase de barra de navegación -->
+<!-- bg-base-100: color de fondo del tema -->
+<!-- z-50: índice z alto para aparecer encima de otros elementos -->
+<div class="fixed top-0 left-0 shadow-sm navbar bg-base-100 z-50">
   <!-- Parte izquierda de la navbar -->
   <div class="navbar-start">
     <!-- Dropdown (menú desplegable) que solo se muestra en pantallas pequeñas (lg:hidden) -->
+    <!-- Esto es el menú hamburguesa para móviles -->
     <div class="dropdown">
       <!-- Botón que abre el dropdown - solo visible en móvil -->
+      <!-- tabindex="0": hace que el elemento sea accesible con tab -->
+      <!-- role="button": rol ARIA que indica que es un botón -->
+      <!-- btn btn-ghost: estilos de botón sin fondo -->
+      <!-- lg:hidden: oculto en pantallas grandes (lg o mayor) -->
       <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
-        <!-- Icono de menú hamburgesa (tres líneas) -->
+        <!-- Ícono de menú hamburgesa (tres líneas) -->
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="w-5 h-5"
@@ -22,16 +33,23 @@
           />
         </svg>
       </div>
-      
+
       <!-- Menú desplegable con las categorías (solo móvil) -->
+      <!-- tabindex="-1": no accesible por tab -->
+      <!-- dropdown-content: contenedor del menú desplegable -->
+      <!-- bg-base-100: color de fondo -->
+      <!-- rounded-box: bordes redondeados -->
+      <!-- z-1: índice z para estar encima de otros elementos -->
+      <!-- w-52: ancho fijo -->
       <ul
         tabindex="-1"
         class="p-2 mt-3 shadow menu menu-sm dropdown-content bg-base-100 rounded-box z-1 w-52"
       >
         <!-- Opción para productos de Hombres -->
         <li>
-          <!-- routerLink navega a la página de productos filtrados por género "men" -->
-          <!-- routerLinkActive añade la clase text-secondary cuando este enlace es activo -->
+          <!-- routerLink="gender/men": navega a la página de productos de hombres -->
+          <!-- class="btn btn-ghost": estilos de botón -->
+          <!-- routerLinkActive="text-secondary": añade la clase cuando este enlace es activo -->
           <a routerLink="gender/men" class="btn btn-ghost" routerLinkActive="text-secondary"
             >Hombres</a
           >
@@ -52,14 +70,21 @@
         </li>
       </ul>
     </div>
-    
+
     <!-- Logo/Título de la tienda que enlaza a la página principal -->
+    <!-- routerLink="/": navega a la página de inicio -->
+    <!-- text-xl: tamaño de texto grande -->
+    <!-- btn btn-ghost: estilos de botón -->
+    <!-- font-montserrat: fuente Montserrat -->
     <a routerLink="/" class="text-xl btn btn-ghost font-montserrat"
       >Teslo <span class="text-primary">| Shop</span></a
     >
   </div>
-  
+
   <!-- Parte central de la navbar (menú horizontal, solo visible en pantallas grandes) -->
+  <!-- hidden: oculto por defecto -->
+  <!-- navbar-center: posición central -->
+  <!-- lg:flex: visible en pantallas grandes, con flex layout -->
   <div class="hidden navbar-center lg:flex">
     <!-- Menú horizontal con las tres categorías (visible solo en desktop) -->
     <ul class="px-1 menu menu-horizontal">
@@ -83,10 +108,38 @@
       </li>
     </ul>
   </div>
-  
+
   <!-- Parte derecha de la navbar -->
-  <div class="navbar-end">
-    <!-- Botón de carrito/acciones (placeholder por ahora) -->
-    <a class="btn">Button</a>
+  <!-- navbar-end: alineación a la derecha -->
+  <!-- gap-4: espaciado entre elementos -->
+  <div class="navbar-end gap-4">
+    <!-- Estructura condicional basada en el estado de autenticación -->
+    <!-- @if: directiva de Angular para mostrar contenido condicionalmente -->
+    
+    <!-- Si el usuario está autenticado -->
+    @if (authService.authStatus()==="authenticated") {
+    <!-- Botón que muestra el nombre completo del usuario -->
+    <!-- authService.user()?.fullName: obtiene el nombre del usuario autenticado -->
+    <!-- {{ }}: interpolación de Angular para mostrar valores dinámicos -->
+    <!-- ?.: operador de encadenamiento opcional para evitar errores si user es null -->
+    <button class="btn btn-ghost">{{ authService.user()?.fullName }}</button>
+
+    <!-- Botón de logout (cerrar sesión) -->
+    <!-- (click)="authService.logout()": ejecuta el método logout al hacer click -->
+    <!-- btn btn-sm: botón pequeño -->
+    <!-- btn-error: color rojo de error -->
+    <button class="btn btn-sm btn-error" (click)="authService.logout()">Salir</button>
+    <!-- Si el usuario NO está autenticado -->
+    } @else if (authService.authStatus() === "not-authenticated") {
+    <!-- Enlace a la página de login -->
+    <!-- routerLink="/auth/login": navega a la página de login -->
+    <!-- btn btn-primary: estilos de botón principal -->
+    <a routerLink="/auth/login" class="btn btn-primary">Login</a>
+    <!-- Si el estado está en "checking" (cargando) -->
+    }@else {
+    <!-- Muestra puntos suspensivos mientras se verifica el estado -->
+    <!-- btn btn-ghost: estilos de botón sin fondo -->
+    <a class="btn btn-ghost">...</a>
+    }
   </div>
 </div>
