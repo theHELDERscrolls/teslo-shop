@@ -22,7 +22,7 @@
           />
         </svg>
       </div>
-      
+
       <!-- Menú desplegable con las categorías (solo móvil) -->
       <ul
         tabindex="-1"
@@ -52,13 +52,13 @@
         </li>
       </ul>
     </div>
-    
+
     <!-- Logo/Título de la tienda que enlaza a la página principal -->
     <a routerLink="/" class="text-xl btn btn-ghost font-montserrat"
       >Teslo <span class="text-primary">| Shop</span></a
     >
   </div>
-  
+
   <!-- Parte central de la navbar (menú horizontal, solo visible en pantallas grandes) -->
   <div class="hidden navbar-center lg:flex">
     <!-- Menú horizontal con las tres categorías (visible solo en desktop) -->
@@ -83,10 +83,17 @@
       </li>
     </ul>
   </div>
-  
+
   <!-- Parte derecha de la navbar -->
-  <div class="navbar-end">
-    <!-- Botón de carrito/acciones (placeholder por ahora) -->
-    <a class="btn">Button</a>
+  <div class="navbar-end gap-4">
+    @if (authService.authStatus()==="authenticated") {
+    <button class="btn btn-ghost">{{ authService.user()?.fullName }}</button>
+
+    <button class="btn btn-sm btn-error">Salir</button>
+    } @else if (authService.authStatus() === "not-authenticated") {
+    <a routerLink="/auth/login" class="btn btn-primary">Login</a>
+    }@else {
+    <a class="btn btn-ghost">...</a>
+    }
   </div>
 </div>

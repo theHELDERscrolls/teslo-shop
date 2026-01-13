@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { AuthService } from '@/auth/services/auth.service';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
@@ -7,6 +8,5 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './front-navbar.html',
 })
 export class FrontNavbar {
-  // Este componente es una barra de navegación simple que muestra links a las diferentes categorías
-  // No tiene lógica en TypeScript, toda la navegación se maneja en el template con routerLink
+  authService = inject(AuthService);
 }
