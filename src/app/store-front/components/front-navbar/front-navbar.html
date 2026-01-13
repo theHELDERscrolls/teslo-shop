@@ -1,5 +1,5 @@
 <!-- Barra de navegación fija en la parte superior -->
-<div class="fixed top-0 left-0 shadow-sm navbar bg-base-100">
+<div class="fixed top-0 left-0 shadow-sm navbar bg-base-100 z-50">
   <!-- Parte izquierda de la navbar -->
   <div class="navbar-start">
     <!-- Dropdown (menú desplegable) que solo se muestra en pantallas pequeñas (lg:hidden) -->
@@ -89,7 +89,7 @@
     @if (authService.authStatus()==="authenticated") {
     <button class="btn btn-ghost">{{ authService.user()?.fullName }}</button>
 
-    <button class="btn btn-sm btn-error">Salir</button>
+    <button class="btn btn-sm btn-error" (click)="authService.logout()">Salir</button>
     } @else if (authService.authStatus() === "not-authenticated") {
     <a routerLink="/auth/login" class="btn btn-primary">Login</a>
     }@else {
