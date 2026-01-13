@@ -1,3 +1,4 @@
+import { AuthService } from '@/auth/services/auth.service';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -11,6 +12,8 @@ export class LoginPage {
   fb = inject(FormBuilder);
   hasError = signal(false);
   isPosting = signal(false);
+
+  authService = inject(AuthService);
 
   // Nota: las validaciones del frontal han de ser lo más similares a las del back
   // para evitar todas las interacciones innecesarias con el mismo.
@@ -30,6 +33,8 @@ export class LoginPage {
 
     const { email = '', password = '' } = this.loginForm.value;
 
-    console.log(email, password);
+    this.authService.login(email!, password!).subscribe((resp) => {
+      console.log(resp);
+    });
   }
 }
