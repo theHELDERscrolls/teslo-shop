@@ -1,0 +1,99 @@
+<h1 class="text-2xl font-bold">{{ product().title }}</h1>
+<div class="divider"></div>
+
+<form
+  [formGroup]="productForm"
+  (ngSubmit)="onSubmit()"
+  class="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-2"
+>
+  <!-- Datos generales -->
+  <div class="flex flex-col gap-2">
+    <h2 class="h-12 text-2xl font-bold">Datos generales</h2>
+    <input
+      type="text"
+      placeholder="Título"
+      class="w-full transition-all duration-300 outline-none input"
+      formControlName="title"
+    />
+
+    <input
+      type="text"
+      placeholder="Slug"
+      class="w-full transition-all duration-300 outline-none input"
+      formControlName="slug"
+    />
+
+    <textarea
+      class="textarea textarea-bordered"
+      placeholder="Descripción"
+      rows="6"
+      formControlName="description"
+    ></textarea>
+
+    <h2 class="text-lg font-bold">Datos de venta</h2>
+
+    <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+      <input
+        type="number"
+        placeholder="Precio"
+        class="w-full transition-all duration-300 outline-none input"
+        formControlName="price"
+      />
+
+      <input
+        type="number"
+        placeholder="Inventario"
+        class="w-full transition-all duration-300 outline-none input"
+        formControlName="stock"
+      />
+    </div>
+
+    <!-- tags -->
+    <input
+      type="text"
+      placeholder="Tags"
+      class="w-full transition-all duration-300 outline-none input"
+      formControlName="tags"
+    />
+
+    <!-- Botones para el género -->
+    <div class="grid grid-cols-4 gap-2">
+      <!-- <button class="btn btn-sm btn-outline">Masculino</button> -->
+      <button type="button" class="btn btn-sm btn-primary">Masculino</button>
+      <button type="button" class="btn btn-sm btn-accent">Femenino</button>
+      <button type="button" class="btn btn-sm btn-warning">Kid</button>
+      <button type="button" class="btn btn-sm btn-secondary">Unisex</button>
+    </div>
+
+    <!-- <select class="w-full select select-bordered">
+      <option value="male">Masculino</option>
+      <option value="female">Femenino</option>
+      <option value="unisex">Unisex</option>
+    </select> -->
+
+    <!-- Sizes -->
+    <div class="grid grid-cols-6 gap-2">
+      @for (size of sizes; track size) {
+      <button class="btn btn-sm btn-outline" type="button">{{ size }}</button>
+      }
+    </div>
+  </div>
+
+  <!-- Imágenes -->
+  <div class="flex flex-col gap-2">
+    <div class="flex justify-end h-12">
+      <button class="btn btn-secondary" type="submit">
+        <!-- <span class="loading loading-spinner loading-sm"></span> -->
+
+        Guardar
+      </button>
+    </div>
+
+    <product-carousel [images]="product().images" />
+
+    <input
+      type="file"
+      class="w-full mt-4 transition-all duration-300 file-input file-outline-none"
+    />
+  </div>
+</form>
