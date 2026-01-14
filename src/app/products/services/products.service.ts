@@ -22,14 +22,14 @@ export class ProductsService {
   // Caché para almacenar productos ya obtenidos (evita peticiones innecesarias)
   // Clave: "limit-offset-gender" para identificar cada combinación de filtros
   private productsCache = new Map<string, ProductsResponse>();
-  
+
   // Caché para almacenar productos individuales por su ID o slug
   private oneProductCache = new Map<string, Product>();
 
   /**
    * Obtiene una lista de productos con filtros opcionales
    * Utiliza caché para evitar hacer peticiones HTTP repetidas con los mismos parámetros
-   * 
+   *
    * @param options - Objeto con limit (cantidad de productos), offset (página) y gender (filtro por género)
    * @returns Observable con la respuesta de productos o datos cacheados
    */
@@ -43,7 +43,7 @@ export class ProductsService {
     // Creamos una clave única basada en los parámetros de búsqueda
     // Esto permite identificar si ya tenemos estos datos cacheados
     const key = `${limit}-${offset}-${gender}`;
-    
+
     // Verificamos si ya tenemos estos datos en caché
     if (this.productsCache.has(key)) {
       // Si existe en caché, devolvemos los datos cacheados sin hacer petición HTTP
@@ -73,7 +73,7 @@ export class ProductsService {
   /**
    * Obtiene un producto específico por su ID o slug
    * Utiliza caché para evitar peticiones repetidas del mismo producto
-   * 
+   *
    * @param idSlug - Identificador único del producto (slug o ID)
    * @returns Observable con los datos del producto individual
    */
@@ -85,9 +85,21 @@ export class ProductsService {
     }
 
     // Si no está cacheado, hacemos la petición HTTP a la API
+    return (
+      this.http
+        .get<Product>(`${BASE_URL}/products/${idSlug}`)
+        // Guardamos el producto en el caché para futuras consultas
+        .pipe(tap((product) => this.oneProductCache.set(idSlug, product)))
+    );
+  }
+
+  getProductById(id: string): Observable<Product> {
+    if (this.productsCache.has(id)) {
+      return of(this.oneProductCache.get(id)!);
+    }
+
     return this.http
-      .get<Product>(`${BASE_URL}/products/${idSlug}`)
-      // Guardamos el producto en el caché para futuras consultas
-      .pipe(tap((product) => this.oneProductCache.set(idSlug, product)));
+      .get<Product>(`${BASE_URL}/products/${id}`)
+      .pipe(tap((product) => this.oneProductCache.set(id, product)));
   }
 }
