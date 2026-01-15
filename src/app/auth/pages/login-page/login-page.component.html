@@ -3,7 +3,6 @@
 <!-- (ngSubmit)="onSubmit()": ejecuta onSubmit() cuando se envía el formulario -->
 <form class="flex flex-col gap-2" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <!-- Campo de entrada para el email -->
-  <!-- class="input input-bordered": estilos de entrada (framework Daisy UI o similar) -->
   <label class="flex items-center gap-2 input input-bordered">
     <!-- Ícono de correo electrónico SVG -->
     <svg
@@ -47,8 +46,6 @@
   </label>
 
   <!-- Botón para enviar el formulario -->
-  <!-- type="submit": envía el formulario y ejecuta (ngSubmit) -->
-  <!-- btn btn-primary: estilos de botón principal -->
   <button type="submit" class="btn btn-primary">Login</button>
 
   <!-- Texto con enlace para usuarios sin cuenta -->
@@ -56,9 +53,6 @@
     ¿No tienes cuenta?
     <!-- Enlace a la página de registro -->
     <!-- routerLink="/auth/register": navega a la ruta de registro sin recargar la página -->
-    <!-- cursor-pointer: cambia el cursor a puntero -->
-    <!-- text-secondary: color secundario del tema -->
-    <!-- hover:underline: subrayado al pasar el ratón -->
     <a routerLink="/auth/register" class="cursor-pointer text-secondary hover:underline"
       >Crea una aquí</a
     >
@@ -70,9 +64,6 @@
 @if (hasError()) {
 <!-- Contenedor de alerta con rol ARIA para accesibilidad -->
 <!-- role="alert": indica que este elemento es una alerta para lectores de pantalla -->
-<!-- alert alert-error: estilos de alerta con color rojo de error -->
-<!-- animate-fade-in: animación de entrada suave -->
-<!-- bottom-5 right-5: posición fija en la esquina inferior derecha -->
 <div role="alert" class="fixed max-w-xl alert alert-error animate-fade-in bottom-5 right-5">
   <!-- Ícono de error (X en círculo) SVG -->
   <svg

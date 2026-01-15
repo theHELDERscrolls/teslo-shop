@@ -93,13 +93,68 @@ export class ProductsService {
     );
   }
 
+  /**
+   * Obtiene un producto específico por su ID
+   * Verifica la caché antes de hacer una petición HTTP
+   *
+   * @param id - Identificador único del producto
+   * @returns Observable con los datos del producto
+   */
   getProductById(id: string): Observable<Product> {
+    // Verificamos si el producto ya está en la caché de productos individuales
     if (this.productsCache.has(id)) {
+      // Si existe, lo devolvemos directamente sin hacer petición
       return of(this.oneProductCache.get(id)!);
     }
 
+    // Si no está cacheado, hacemos la petición HTTP a la API
     return this.http
       .get<Product>(`${BASE_URL}/products/${id}`)
       .pipe(tap((product) => this.oneProductCache.set(id, product)));
+  }
+
+  /**
+   * Actualiza un producto enviando los cambios al servidor
+   * Después de actualizar, refuerza la caché con los nuevos datos
+   *
+   * @param id - Identificador único del producto a actualizar
+   * @param productLike - Objeto con los campos a actualizar (parcial)
+   * @returns Observable con el producto actualizado desde el servidor
+   */
+  updateProduct(id: string, productLike: Partial<Product>): Observable<Product> {
+    // Hacemos una petición PATCH a la API para actualizar el producto
+    // PATCH solo envía los campos que han cambiado, no todo el objeto
+    return this.http
+      .patch<Product>(`${BASE_URL}/products/${id}`, productLike)
+      // Después de recibir la respuesta, actualizamos la caché
+      .pipe(tap((product) => this.updateProductCache(product)));
+  }
+
+  /**
+   * Actualiza la caché con los datos nuevos de un producto
+   * Sincroniza tanto la caché de productos individuales como la de listas
+   * Esto asegura que todos los lugares donde aparezca el producto muestren datos actualizados
+   *
+   * @param product - Producto actualizado con los nuevos datos
+   */
+  updateProductCache(product: Product) {
+    // Obtenemos el ID del producto actualizado
+    const productId = product.id;
+
+    // Actualizamos el producto en la caché de productos individuales
+    // Esto es para consultas del tipo: getProductById(id)
+    this.oneProductCache.set(productId, product);
+
+    // Recorremos todas las listas de productos cacheadas (diferentes páginas y filtros)
+    this.productsCache.forEach((productResp) => {
+      // Para cada lista de productos, buscamos el producto con el mismo ID
+      // y lo reemplazamos con la versión actualizada
+      // Esto asegura que si el producto aparece en múltiples listas, se actualicen todas
+      productResp.products = productResp.products.map((currentProduct) => {
+        // Si es el producto que actualizamos, lo reemplazamos con la versión nueva
+        // Si no es, lo dejamos igual
+        return currentProduct.id === productId ? product : currentProduct;
+      });
+    });
   }
 }

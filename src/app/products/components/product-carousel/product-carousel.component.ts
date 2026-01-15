@@ -9,6 +9,9 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
 
+// Componente carrusel que muestra imágenes de productos de forma interactiva
+// Utiliza la librería Swiper para proporcionar funcionalidad de deslizamiento
+// El usuario puede navegar entre imágenes con botones o puntos de paginación
 @Component({
   selector: 'product-carousel',
   imports: [ProductImagePipe],
@@ -23,21 +26,23 @@ import { Navigation, Pagination } from 'swiper/modules';
 export class ProductCarousel implements AfterViewInit {
   // Input requerido: array de URLs de imágenes del producto
   // Este valor viene del componente padre (product-card o product-page)
+  // Las imágenes se mostrarán en el carrusel para que el usuario las pueda ver
   images = input.required<string[]>();
 
   // Referencia al elemento del DOM donde está el carrusel Swiper
-  // Se obtiene usando el template reference variable #swiperDiv
+  // Se obtiene usando el template reference variable #swiperDiv en el HTML
+  // viewChild.required() asegura que el elemento siempre existe
   swiperDiv = viewChild.required<ElementRef>('swiperDiv');
 
   /**
-   * Se ejecuta después de que la vista se haya inicializado
-   * Aquí inicializamos el carrusel Swiper con sus configuraciones
+   * Se ejecuta después de que la vista se haya inicializado completamente
+   * Aquí inicializamos la librería Swiper con sus configuraciones y módulos
    */
   ngAfterViewInit(): void {
-    // Obtenemos el elemento del DOM nativo del template reference variable
+    // Obtenemos el elemento del DOM nativo mediante la referencia del template
     const element = this.swiperDiv().nativeElement;
 
-    // Si no existe el elemento, retornamos para evitar errores
+    // Si no existe el elemento, retornamos para evitar errores de inicialización
     if (!element) return;
 
     // Inicializamos Swiper con las configuraciones deseadas
@@ -45,9 +50,12 @@ export class ProductCarousel implements AfterViewInit {
       // El carrusel se desplaza horizontalmente (de izquierda a derecha)
       direction: 'horizontal',
       // loop: true permite que cuando llegues al final, vuelva al principio de forma continua
+      // Esto crea un efecto de carrusel infinito
       loop: true,
 
       // Registramos los módulos que usaremos en el carrusel
+      // Navigation: botones de siguiente/anterior
+      // Pagination: puntos indicadores de qué slide está activo
       modules: [Navigation, Pagination],
 
       // Configuración de la paginación (los puntos que indican en qué slide estamos)
