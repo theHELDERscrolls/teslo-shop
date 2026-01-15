@@ -80,6 +80,7 @@
 
     <!-- Botones para el género -->
     <div class="grid grid-cols-4 gap-2">
+      <!-- Botón para género Masculino -->
       <button
         type="button"
         class="btn btn-sm"
@@ -88,6 +89,7 @@
       >
         Masculino
       </button>
+      <!-- Botón para género Femenino -->
       <button
         type="button"
         class="btn btn-sm"
@@ -96,6 +98,7 @@
       >
         Femenino
       </button>
+      <!-- Botón para género Niños -->
       <button
         type="button"
         class="btn btn-sm"
@@ -104,6 +107,7 @@
       >
         Kid
       </button>
+      <!-- Botón para género Unisex -->
       <button
         type="button"
         class="btn btn-sm"
@@ -114,9 +118,12 @@
       </button>
     </div>
 
-    <!-- Sizes -->
+    <!-- Sizes - Selección de tallas disponibles -->
     <div class="grid grid-cols-6 gap-2">
+      <!-- Loop que itera sobre cada talla disponible -->
       @for (size of sizes; track size) {
+      <!-- Botón para seleccionar/deseleccionar una talla -->
+      <!-- Aplica estilos especiales cuando la talla está seleccionada -->
       <button
         class="btn btn-sm"
         type="button"
@@ -132,9 +139,7 @@
   <!-- Imágenes -->
   <div class="flex flex-col gap-2">
     <div class="flex justify-end h-12">
-      <button class="btn btn-secondary" type="submit">
-        Guardar
-      </button>
+      <button class="btn btn-secondary" type="submit">Guardar</button>
     </div>
 
     <product-carousel [images]="product().images" />
@@ -145,3 +150,12 @@
     />
   </div>
 </form>
+
+<!-- Alerta de éxito que se muestra cuando el producto se guarda correctamente -->
+<!-- @if (wasSaved()): directiva de Angular que muestra el contenido solo si wasSaved es true -->
+<!-- Se muestra durante 3 segundos y luego desaparece automáticamente -->
+@if (wasSaved()) {
+<div class="alert alert-success fixed bottom-4 right-4 w-80 animate-fade-in">
+  <span>Datos actualizados correctamente</span>
+</div>
+}

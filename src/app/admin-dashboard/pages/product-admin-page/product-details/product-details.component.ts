@@ -1,11 +1,12 @@
 import { Product } from '@/products/interfaces/product.interface';
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { ProductCarousel } from '@/products/components/product-carousel/product-carousel.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormUtils } from '@/utils/form-utils';
 import { FormErrorLabel } from '@/shared/components/form-error-label/form-error-label.component';
 import { ProductsService } from '@/products/services/products.service';
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 // Componente que muestra el formulario de edición de detalles de un producto
 // Permite al administrador actualizar:
@@ -25,6 +26,10 @@ export class ProductDetails implements OnInit {
 
   router = inject(Router);
   productService = inject(ProductsService);
+  
+  // Signal para controlar si el producto fue guardado exitosamente
+  // Se activa durante 3 segundos para mostrar un mensaje de confirmación al usuario
+  wasSaved = signal(false);
 
   // Inyectamos FormBuilder para construir el formulario reactivo
   fb = inject(FormBuilder);
@@ -93,9 +98,10 @@ export class ProductDetails implements OnInit {
   /**
    * Maneja el envío del formulario de edición de producto
    * Valida los datos, procesa los tags, y crea o actualiza el producto según sea necesario
-   * Si es un producto nuevo (id === 'new'), lo crea; si no, lo actualiza
+   * Muestra un mensaje de confirmación al usuario después de guardar
+   * Si es un producto nuevo (id === 'new'), navega a la página del producto creado
    */
-  onSubmit() {
+  async onSubmit() {
     // Verificamos que el formulario sea válido antes de procesar
     const isValid = this.productForm.valid;
 
@@ -119,14 +125,26 @@ export class ProductDetails implements OnInit {
 
     // Si es un producto nuevo (id === 'new'), creamos uno nuevo en la base de datos
     if (this.product().id === 'new') {
-      this.productService.createProduct(productLike);
-    } 
+      // firstValueFrom() convierte el Observable en una Promise para usar async/await
+      // Esperamos a que se complete la creación y obtenemos el producto con su ID asignado
+      const product = await firstValueFrom(this.productService.createProduct(productLike));
+
+      // Navegamos a la página de edición del producto creado con su nuevo ID
+      this.router.navigate(['/admin/products', product.id]);
+    }
     // Si es un producto existente, lo actualizamos
     else {
-      this.productService.updateProduct(this.product().id, productLike).subscribe((producto) => {
-        console.log('🔃 Producto actualizado');
-      });
+      // firstValueFrom() convierte el Observable en Promise para esperar la actualización
+      await firstValueFrom(this.productService.updateProduct(this.product().id, productLike));
     }
+
+    // Activamos el signal para mostrar el mensaje de éxito
+    this.wasSaved.set(true);
+    
+    // Desactivamos el mensaje después de 3 segundos para que desaparezca automáticamente
+    setTimeout(() => {
+      this.wasSaved.set(false);
+    }, 3000);
   }
 
   /**
