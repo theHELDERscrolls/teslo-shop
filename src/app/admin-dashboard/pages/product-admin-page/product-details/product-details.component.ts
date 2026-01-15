@@ -5,6 +5,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormUtils } from '@/utils/form-utils';
 import { FormErrorLabel } from '@/shared/components/form-error-label/form-error-label.component';
 import { ProductsService } from '@/products/services/products.service';
+import { Router } from '@angular/router';
 
 // Componente que muestra el formulario de edición de detalles de un producto
 // Permite al administrador actualizar:
@@ -22,6 +23,7 @@ export class ProductDetails implements OnInit {
   // Viene del componente padre (product-admin-page)
   product = input.required<Product>();
 
+  router = inject(Router);
   productService = inject(ProductsService);
 
   // Inyectamos FormBuilder para construir el formulario reactivo
@@ -88,24 +90,43 @@ export class ProductDetails implements OnInit {
     // this.productForm.patchValue(formLike as any);
   }
 
+  /**
+   * Maneja el envío del formulario de edición de producto
+   * Valida los datos, procesa los tags, y crea o actualiza el producto según sea necesario
+   * Si es un producto nuevo (id === 'new'), lo crea; si no, lo actualiza
+   */
   onSubmit() {
+    // Verificamos que el formulario sea válido antes de procesar
     const isValid = this.productForm.valid;
 
+    // Si hay errores de validación, cancelamos la operación
     if (!isValid) return;
 
+    // Obtenemos los valores del formulario
     const formValue = this.productForm.value;
 
+    // Creamos el objeto a enviar al servidor
+    // Esparcimos todos los valores del formulario y procesamos los tags especialmente
     const productLike: Partial<Product> = {
       ...(formValue as any),
+      // Los tags vienen como string separados por comas en el input
+      // Los convertimos a array, limpiamos espacios en blanco y convertimos a minúsculas
       tags: formValue.tags
         ?.toLowerCase()
         .split(',')
         .map((tag) => tag.trim() ?? []),
     };
 
-    this.productService.updateProduct(this.product().id, productLike).subscribe((producto) => {
-      console.log('🔃 Producto actualizado');
-    });
+    // Si es un producto nuevo (id === 'new'), creamos uno nuevo en la base de datos
+    if (this.product().id === 'new') {
+      this.productService.createProduct(productLike);
+    } 
+    // Si es un producto existente, lo actualizamos
+    else {
+      this.productService.updateProduct(this.product().id, productLike).subscribe((producto) => {
+        console.log('🔃 Producto actualizado');
+      });
+    }
   }
 
   /**

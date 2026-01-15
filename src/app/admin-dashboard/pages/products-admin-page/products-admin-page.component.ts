@@ -4,13 +4,14 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { ProductsService } from '@/products/services/products.service';
 import { PaginationService } from '@/shared/components/pagination/pagination.service';
 import { Pagination } from '@/shared/components/pagination/pagination.component';
+import { RouterLink } from "@angular/router";
 
 // Página del panel de administración que lista todos los productos
 // Los administradores pueden ver, editar y eliminar productos desde aquí
 // Incluye paginación para manejar listas largas de productos
 @Component({
   selector: 'app-products-admin-page',
-  imports: [ProductTable, Pagination],
+  imports: [ProductTable, Pagination, RouterLink],
   templateUrl: './products-admin-page.component.html',
 })
 export class ProductsAdminPage {
@@ -32,14 +33,16 @@ export class ProductsAdminPage {
     // Parámetros necesarios para la petición
     // Incluyen la página actual y el número de productos a mostrar
     params: () => ({
+      // currentPage() devuelve 1 para la primera página, así que restamos 1 para que sea 0-based
       page: this.paginationService.currentPage() - 1,
+      // Cantidad de productos a mostrar por página en el panel de admin
       limit: this.productsPerpage(),
     }),
     
-    // Función que hace la petición HTTP
+    // Función que hace la petición HTTP con los parámetros
     stream: ({ params }) => {
       // Llamamos al servicio para obtener los productos con paginación
-      // Cada página de admin muestra 10 productos (del parámetro limit)
+      // Calculamos el offset: si estamos en página 0 offset es 0, página 1 es 9, etc (9 productos por página)
       return this.productsService.getProducts({
         offset: params.page * 9,
         limit: params.limit,

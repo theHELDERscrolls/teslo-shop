@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Product, ProductsResponse } from '../interfaces/product.interface';
+import { Gender, Product, ProductsResponse } from '../interfaces/product.interface';
 import { Observable, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { User } from '@/auth/interfaces/user.interface';
 
 const BASE_URL = environment.baseUrl;
 
@@ -11,6 +12,20 @@ interface Options {
   offset?: number;
   gender?: string;
 }
+
+const emptyProduct: Product = {
+  id: 'new',
+  title: '',
+  price: 0,
+  description: '',
+  slug: '',
+  stock: 0,
+  sizes: [],
+  gender: Gender.Men,
+  tags: [],
+  images: [],
+  user: {} as User,
+};
 
 @Injectable({
   providedIn: 'root',
@@ -96,11 +111,18 @@ export class ProductsService {
   /**
    * Obtiene un producto específico por su ID
    * Verifica la caché antes de hacer una petición HTTP
+   * Caso especial: si el ID es 'new', devuelve un producto vacío para crear uno nuevo
    *
-   * @param id - Identificador único del producto
+   * @param id - Identificador único del producto (o 'new' para crear uno nuevo)
    * @returns Observable con los datos del producto
    */
   getProductById(id: string): Observable<Product> {
+    // Caso especial: si se quiere crear un producto nuevo, devolvemos un template vacío
+    // Esto permite al formulario tener todos los campos inicializados correctamente
+    if (id === 'new') {
+      return of(emptyProduct);
+    }
+
     // Verificamos si el producto ya está en la caché de productos individuales
     if (this.productsCache.has(id)) {
       // Si existe, lo devolvemos directamente sin hacer petición
@@ -124,10 +146,12 @@ export class ProductsService {
   updateProduct(id: string, productLike: Partial<Product>): Observable<Product> {
     // Hacemos una petición PATCH a la API para actualizar el producto
     // PATCH solo envía los campos que han cambiado, no todo el objeto
-    return this.http
-      .patch<Product>(`${BASE_URL}/products/${id}`, productLike)
-      // Después de recibir la respuesta, actualizamos la caché
-      .pipe(tap((product) => this.updateProductCache(product)));
+    return (
+      this.http
+        .patch<Product>(`${BASE_URL}/products/${id}`, productLike)
+        // Después de recibir la respuesta, actualizamos la caché
+        .pipe(tap((product) => this.updateProductCache(product)))
+    );
   }
 
   /**
@@ -156,5 +180,21 @@ export class ProductsService {
         return currentProduct.id === productId ? product : currentProduct;
       });
     });
+  }
+
+  /**
+   * Crea un nuevo producto en el servidor
+   * Después de crear, actualiza la caché con el nuevo producto
+   * 
+   * @param porductLike - Objeto con los datos del nuevo producto a crear
+   * @returns Observable con el producto creado (incluye su ID asignado por el servidor)
+   */
+  createProduct(porductLike: Partial<Product>): Observable<Product> {
+    // Hacemos una petición POST a la API para crear el producto
+    // POST se usa para crear nuevos recursos en el servidor
+    return this.http
+      .post<Product>(`${BASE_URL}/products`, porductLike)
+      // Después de recibir la respuesta con el producto creado, actualizamos la caché
+      .pipe(tap((product) => this.updateProductCache(product)));
   }
 }
