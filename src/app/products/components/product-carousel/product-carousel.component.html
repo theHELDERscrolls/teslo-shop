@@ -4,17 +4,29 @@
   <!-- Wrapper requerido por Swiper para contener los slides -->
   <div class="swiper-wrapper">
     <!-- Loop que itera sobre cada imagen del array de imágenes -->
-    <!-- track $index optimiza el rendimiento identificando cada elemento por su índice -->
     @for (image of images(); track $index) {
     <!-- Cada slide es un contenedor para una imagen del producto -->
     <div class="swiper-slide">
       <!-- Mostramos la imagen aplicando el pipe productImage para obtener la URL completa -->
-      <!-- productImage transforma el nombre de archivo en una URL válida de la API -->
-      <img [src]="image | productImage" alt="Product" class="object-cover w-full h-full max-w-xl mx-auto animate-fade-in" />
+      <img
+        [src]="image | productImage"
+        alt="Product"
+        class="object-cover w-full h-full max-w-xl mx-auto animate-fade-in"
+      />
+    </div>
+    } @empty {
+    <!-- Contenedor vacío que se muestra cuando no hay imágenes disponibles -->
+    <!-- Muestra un placeholder (imagen de relleno) cuando el producto no tiene fotos -->
+    <div class="swiper-slide">
+      <img
+        [src]="null | productImage"
+        alt="Product"
+        class="object-cover w-full h-full max-w-xl mx-auto animate-fade-in"
+      />
     </div>
     }
   </div>
-  
+
   <!-- Paginación: muestra puntos en la parte inferior indicando en qué slide estamos -->
   <div class="swiper-pagination"></div>
 

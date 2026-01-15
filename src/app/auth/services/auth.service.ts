@@ -24,11 +24,11 @@ export class AuthService {
   // Signal privado que almacena el estado actual de autenticación
   // Inicialmente es 'checking' para verificar si hay una sesión activa
   private _authStatus = signal<AuthStatus>('checking');
-  
+
   // Signal privado que almacena los datos del usuario autenticado
   // Es null si no hay usuario autenticado
   private _user = signal<User | null>(null);
-  
+
   // Signal privado que almacena el token JWT obtenido del localStorage
   // Se utiliza para autenticar las solicitudes HTTP posteriores
   private _token = signal<string | null>(localStorage.getItem('token'));
@@ -57,46 +57,56 @@ export class AuthService {
   // Los componentes pueden leer estos datos pero no pueden modificarlos
   user = computed(() => this._user());
   token = computed(this._token);
+  isAdmin = computed(() => {
+    return this._user()?.roles.includes('admin') ?? false;
+  });
 
   // Metodo para hacer login con email y contraseña
   // Retorna un Observable<boolean> que indica si la autenticación fue exitosa
   login(email: string, password: string): Observable<boolean> {
-    return this.http
-      // Realiza una solicitud POST al endpoint /auth/login del servidor
-      .post<AuthResponse>(`${BASE_URL}/auth/login`, {
-        email: email,
-        password: password,
-      })
-      .pipe(
-        // Si la respuesta es exitosa, procesa los datos con handleAuthSuccess
-        map((resp) => this.handleAuthSuccess(resp)),
-        // Si hay error en la solicitud, lo maneja con handleAuthError
-        catchError((error: any) => this.handleAuthError(error))
-      );
+    return (
+      this.http
+        // Realiza una solicitud POST al endpoint /auth/login del servidor
+        .post<AuthResponse>(`${BASE_URL}/auth/login`, {
+          email: email,
+          password: password,
+        })
+        .pipe(
+          // Si la respuesta es exitosa, procesa los datos con handleAuthSuccess
+          map((resp) => this.handleAuthSuccess(resp)),
+          // Si hay error en la solicitud, lo maneja con handleAuthError
+          catchError((error: any) => this.handleAuthError(error))
+        )
+    );
   }
 
   // Metodo para registrar un nuevo usuario
   // Retorna un Observable<boolean> que indica si el registro fue exitoso
   register(fullName: string, email: string, password: string): Observable<boolean> {
-    return this.http
-      // Realiza una solicitud POST al endpoint /auth/register del servidor
-      .post<AuthResponse>(`${BASE_URL}/auth/register`, {
-        fullName: fullName,
-        email: email,
-        password: password,
-      })
-      .pipe(
-        // Si la respuesta es exitosa, procesa los datos con handleAuthSuccess
-        map((resp) => this.handleAuthSuccess(resp)),
-        // Si hay error en la solicitud, lo maneja con handleAuthError
-        catchError((error: any) => this.handleAuthError(error))
-      );
+    return (
+      this.http
+        // Realiza una solicitud POST al endpoint /auth/register del servidor
+        .post<AuthResponse>(`${BASE_URL}/auth/register`, {
+          fullName: fullName,
+          email: email,
+          password: password,
+        })
+        .pipe(
+          // Si la respuesta es exitosa, procesa los datos con handleAuthSuccess
+          map((resp) => this.handleAuthSuccess(resp)),
+          // Si hay error en la solicitud, lo maneja con handleAuthError
+          catchError((error: any) => this.handleAuthError(error))
+        )
+    );
   }
 
   // Metodo para verificar el estado actual de autenticación del usuario
   // Se ejecuta al cargar la aplicación para restaurar la sesión anterior si existe
   // Retorna un Observable<boolean> que indica si el usuario está autenticado
   checkStatus(): Observable<boolean> {
+    if (this._authStatus() !== 'checking') {
+      return of(this._authStatus() === 'authenticated');
+    }
     // Obtiene el token almacenado en el localStorage
     const token = localStorage.getItem('token');
 
