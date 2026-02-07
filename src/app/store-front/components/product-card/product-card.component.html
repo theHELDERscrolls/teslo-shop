@@ -1,0 +1,32 @@
+<!-- Tarjeta de producto con sombra y animación de entrada -->
+<div class="shadow-sm card bg-base-100 animate-fade-in">
+  <!-- Figura (contenedor de la imagen del producto) -->
+  <figure>
+    <!-- Imagen del producto con transformación de URL usando el pipe productImage -->
+    <!-- El pipe convierte el nombre de archivo en una URL válida -->
+    <img [src]="product().images | productImage" [alt]="product().title" />
+  </figure>
+  
+  <!-- Cuerpo de la tarjeta con información del producto -->
+  <div class="card-body">
+    <!-- Título del producto que actúa como enlace a la página de detalle -->
+    <!-- [routerLink] navega a la página del producto usando su slug -->
+    <h2
+      [routerLink]="['/product', product().slug]"
+      class="text-base cursor-pointer card-title font-montserrat text-accent hover:underline"
+    >
+      {{ product().title }}
+    </h2>
+    
+    <!-- Descripción truncada a 70 caracteres para no ocupar mucho espacio -->
+    <!-- pipe slice : 0 : 70 recorta el texto a los primeros 70 caracteres -->
+    <!-- Los tres puntos indican que hay más texto disponible -->
+    <p>{{ product().description | slice : 0 : 70 }}...</p>
+    
+    <!-- Acciones de la tarjeta (botones alineados a la derecha) -->
+    <div class="justify-end card-actions">
+      <!-- Enlace "Ver más" que navega a la página detallada del producto -->
+      <a [routerLink]="['/product', product().slug]" class="link link-secondary">See more</a>
+    </div>
+  </div>
+</div>

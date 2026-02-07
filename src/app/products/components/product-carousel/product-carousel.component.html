@@ -1,0 +1,39 @@
+<!-- Contenedor principal del carrusel Swiper -->
+<!-- #swiperDiv es una referencia al template que usamos en TypeScript para inicializar Swiper -->
+<div class="w-full max-w-xl swiper" #swiperDiv>
+  <!-- Wrapper requerido por Swiper para contener los slides -->
+  <div class="swiper-wrapper">
+    <!-- Loop que itera sobre cada imagen del array de imágenes -->
+    @for (image of images(); track $index) {
+    <!-- Cada slide es un contenedor para una imagen del producto -->
+    <div class="swiper-slide">
+      <!-- Mostramos la imagen aplicando el pipe productImage para obtener la URL completa -->
+      <img
+        [src]="image | productImage"
+        alt="Product"
+        class="object-cover w-full h-full max-w-xl mx-auto animate-fade-in"
+      />
+    </div>
+    } @empty {
+    <!-- Contenedor vacío que se muestra cuando no hay imágenes disponibles -->
+    <!-- Muestra un placeholder (imagen de relleno) cuando el producto no tiene fotos -->
+    <div class="swiper-slide">
+      <img
+        [src]="null | productImage"
+        alt="Product"
+        class="object-cover w-full h-full max-w-xl mx-auto animate-fade-in"
+      />
+    </div>
+    }
+  </div>
+
+  <!-- Paginación: muestra puntos en la parte inferior indicando en qué slide estamos -->
+  <div class="swiper-pagination"></div>
+
+  <!-- Botones de navegación (flechas) para ir al slide anterior y siguiente -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+
+  <!-- Barra de scroll (opcional, pero lo deja Swiper disponible) -->
+  <div class="swiper-scrollbar"></div>
+</div>

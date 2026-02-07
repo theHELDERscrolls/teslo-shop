@@ -1,0 +1,27 @@
+<!-- Contenedor de paginación centrado con estilos de botones unidos -->
+<div class="flex items-center justify-center join">
+  <!-- Loop que itera sobre cada número de página disponible -->
+  <!-- track page optimiza el rendimiento identificando cada botón por su número -->
+  @for (page of getPagesList(); track page) {
+  <!-- Botón para cada página -->
+
+  <!-- 
+    Aplica la clase btn-primary (estilo de botón activo) si es la página actual
+    [routerLink]="[]" mantiene la misma ruta sin cambios
+    Añade/actualiza el parámetro "page" en la URL de consulta
+    Ejemplo: al hacer clic en página 3, la URL pasa a ser /ruta?page=3
+    Al hacer clic, actualiza activePage con el número de la página seleccionada
+  -->
+
+  <button
+    class="join-item btn"
+    [class.btn-primary]="page === activePage()"
+    [routerLink]="[]"
+    [queryParams]="{ page: page }"
+    (click)="activePage.set(page)"
+  >
+    <!-- Mostramos el número de la página dentro del botón -->
+    {{ page }}
+  </button>
+  }
+</div>

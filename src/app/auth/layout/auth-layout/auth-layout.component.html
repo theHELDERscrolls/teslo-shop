@@ -1,0 +1,13 @@
+<!-- Contenedor principal centrado en la pantalla -->
+<div class="flex items-center justify-center min-h-screen">
+  <!-- Caja que contiene el formulario de autenticación -->
+  <div class="w-full max-w-xs bg-slate-100 shadow-2xl rounded-lg p-4">
+    <!-- Título de la sección de autenticación -->
+    <h1 class="text-2xl font-montserrat font-bold text-secondary text-center mb-2">
+      Autenticación
+    </h1>
+    <!-- RouterOutlet: espacio donde Angular renderiza el componente de la ruta activa -->
+    <!-- Aquí se cargará LoginPage o RegisterPage según la URL -->
+    <router-outlet />
+  </div>
+</div>
